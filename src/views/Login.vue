@@ -89,6 +89,9 @@ async function login() {
 			loginSnackbar.value = true
 		}
 	})
+	.catch((error) => {
+		console.log(error)
+	})
 }
 
 function onSubmit () {
