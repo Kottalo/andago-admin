@@ -60,9 +60,9 @@ const router = createRouter({
   routes,
 })
 
-const user = (await supabase.auth.getUser()).data?.user
-
 router.beforeEach(async (to) => {
+  const user = (await supabase.auth.getUser()).data?.user
+
   if (!user && to.name !== 'Login') {
     return '/login'
   }
