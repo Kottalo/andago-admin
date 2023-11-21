@@ -10,7 +10,7 @@
           </template>
         </v-list-item>
         <v-list-item v-show="drawer == true" active base-color="primary" prepend-icon="mdi-logout" title="Logout"
-                 @click="logout"></v-list-item>
+                 @click="logout()"></v-list-item>
       </v-list>
 
       <v-divider></v-divider>
@@ -45,12 +45,6 @@ import socket from '@/services/socket-io'
 
 const store = useAppStore()
 
-onMounted(() => {
-  socket.on('connect', () => {
-    console.log('socket.io connected')
-  })
-})
-
 const drawer = ref(true)
 const rail = ref(true)
 const items: any[] = [
@@ -75,6 +69,7 @@ async function logout()
   console.log(signOutResponse)
 
   if (signOutResponse) {
+    socket.disconnect()
     router.go(0)
   }
 }

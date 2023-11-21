@@ -1,6 +1,13 @@
 <template>
 	<v-app>
 		<v-sheet class="pa-12" rounded>
+			<v-img
+				class="bg-white"
+				height="200"
+				:aspect-ratio="1"
+				:src="andagoLogo"
+			></v-img>
+
 			<v-card class="mx-auto px-6 py-8" max-width="344">
 				<v-form
 					v-model="form"
@@ -56,6 +63,7 @@ import { onMounted, ref } from 'vue'
 import { supabase } from '@/services/supabase'
 import { useAppStore } from '@/store/app'
 import router from '@/router'
+import andagoLogo from '@/assets/andago-logo.png'
 
 const form = ref(false)
 const loading = ref(false)
