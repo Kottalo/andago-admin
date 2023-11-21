@@ -21,16 +21,16 @@
         <td class="text-center">{{ trip?.driver?.profile?.name }}</td>
         <td class="text-center">{{ trip?.passenger?.selectedVehicle?.plate_number }}</td>
         <td class="text-center">
-          {{ statuses[trip?.status] }}
+          <v-chip color="success">
+            {{ getTripStatusText(trip?.tripStatus) }}
+          </v-chip>
         </td>
         <td class="text-center">
           <v-btn
             color="primary"
             @click="viewTripStatus(trip)"
           >
-            <v-chip color="success">
-              {{ getTripStatusText(trip?.tripStatus) }}
-            </v-chip>
+            View Status
           </v-btn>
         </td>
       </tr>
@@ -82,7 +82,7 @@ onMounted(() => {
 })
 
 function getTrips() {
-  socket.emit('getOngoingTrips', null, (data: any) => {
+  socket.emit('adminGetOngoingTrips', null, (data: any) => {
     tripData.value = data.trips
   })
 }

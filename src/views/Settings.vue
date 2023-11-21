@@ -58,7 +58,7 @@ function setConfig(configData: any)
 
 function getConfig()
 {
-  socket.emit('getConfig', null, (data: { config: any }) => {
+  socket.emit('adminGetConfig', null, (data: { config: any }) => {
     const configData = data.config
 
     console.log(configData)
@@ -69,7 +69,7 @@ function getConfig()
 
 function updateConfig()
 {
-  console.log('updateConfig', config)
+  console.log('adminUpdateConfig', config)
 
   socket.emit('updateConfig', { config }, (data: { config: any }) => {
     const configData = data.config

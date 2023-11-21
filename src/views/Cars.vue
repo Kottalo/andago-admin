@@ -11,47 +11,38 @@
 
       <tbody>
       <tr
-        v-for="vehicle in data"
-        :key="vehicle.name"
+        v-for="car in carData"
+        :key="car.id"
       >
-        <td class="text-center">{{ vehicle?.plate_number }}</td>
-        <td class="text-center">{{ vehicle?.passenger.user.name }}</td>
+        <td class="text-center">{{ car.plateNumber }}</td>
+        <td class="text-center">{{ car.passenger.profile.name }}</td>
         <td class="text-center">
           <v-img
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="storageUrl + '/vehicles/' + vehicle?.vehicle_photo"
+            :src="storageUrl + '/vehicles/' + car.carPhoto"
           ></v-img>
         </td>
         <td class="text-center">
           <v-select
-            v-model="vehicle.status"
-            :items="vehicleStatuses"
+            v-model="car.status"
+            :items="carStatuses"
             item-title="text"
             item-value="value"
-            @update:model-value="updateVehicle(vehicle)"
+            @update:model-value="updateCar(car)"
           ></v-select>
         </td>
       </tr>
       </tbody>
     </v-table>
-
-    <v-overlay
-      activator="parent"
-      location-strategy="connected"
-      scroll-strategy="none"
-    >
-      <v-card class="pa-2">
-        Hello!
-      </v-card>
-    </v-overlay>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/app'
+import socket from '@/services/socket-io';
 
 const store = useAppStore()
 
@@ -72,47 +63,37 @@ const headers = [
   // { text: 'Actions', value: 'action' },
 ]
 
-const data = ref<any[]>([] as any[])
+const carData = ref<any[]>([] as any[])
 
-const vehicleStatuses = [
+const carStatuses = [
   {
     text: 'Pending',
-    value: 'pending',
+    value: 'PENDING',
   },
   {
     text: 'Verified',
-    value: 'verified',
+    value: 'VERIFIED',
   },
   {
     text: 'Rejected',
-    value: 'rejected',
+    value: 'REJECTED',
   },
 ]
 
 onMounted(() => {
-  getVehicles()
+  getCars()
 })
 
-function getVehicles() {
-  store.axios.post('/getVehicles')
-    .then((res: any) => {
-      const vehicles = res.data
+function getCars() {
+  socket.emit('adminGetCars', null, (data: any) => {
+    console.log(data)
 
-      console.log(vehicles)
-      data.value = vehicles
-    })
+    carData.value = data.cars
+  })
 }
 
-function updateVehicle(vehicle: any) {
-  console.log(vehicle)
-  store.axios.post('/updateVehicle', {
-    vehicleId: vehicle.id,
-    status: vehicle.status
-  })
-    .then((res: any) => {
-      console.log(res.data)
-      getVehicles()
-    })
+function updateCar(vehicle: any) {
+  
 }
 
 </script>

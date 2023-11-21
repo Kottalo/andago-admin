@@ -67,7 +67,7 @@
   })
   
   function getTrips() {
-    socket.emit('getTripHistory', null, (data: any) => {
+    socket.emit('adminGetTripHistory', null, (data: any) => {
       console.log(data)
 
       tripData.value = data.trips
