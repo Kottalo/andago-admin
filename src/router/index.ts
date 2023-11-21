@@ -38,10 +38,15 @@ const routes = [
         component: () => import('@/views/Drivers.vue'),
       },
       {
-        path: '/trips',
-        name: 'Trips',
-        component: () => import('@/views/Trips.vue'),
+        path: '/ongoingTrips',
+        name: 'Ongoing Trips',
+        component: () => import('@/views/OngoingTrips.vue'),
       },
+      {
+        path: '/tripHistory',
+        name: 'Trip History',
+        component: () => import('@/views/TripHistory.vue'),
+      }
     ]
   }
 ]

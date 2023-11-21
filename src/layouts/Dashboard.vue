@@ -19,12 +19,13 @@
         <v-list-item prepend-icon="mdi-cog" title="Settings" value="settings" to="settings"></v-list-item>
         <v-list-item prepend-icon="mdi-car-side" title="Vehicles" value="vehicles" to="vehicles"></v-list-item>
         <v-list-item prepend-icon="mdi-card-account-details-outline" title="Drivers" value="drivers" to="drivers"></v-list-item>
-        <v-list-item prepend-icon="mdi-flag-variant" title="Trips" value="trips" to="trips"></v-list-item>
+        <v-list-item prepend-icon="mdi-flag-variant" title="Ongoing Trips" value="ongoingTrips" to="ongoingTrips"></v-list-item>
+        <v-list-item prepend-icon="mdi-history" title="Trip History" value="tripHistory" to="tripHistory"></v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
       <v-app-bar :elevation="2" dense>
-        <v-toolbar-title>Application</v-toolbar-title>
+        <v-toolbar-title>Andago Admin Dashboard</v-toolbar-title>
       </v-app-bar>
 
       <v-container class="pa-0">
@@ -45,13 +46,6 @@ import socket from '@/services/socket-io'
 const store = useAppStore()
 
 onMounted(() => {
-  const response = socket.emit('test', 'test', (data: any) => {
-    console.log('socket.io test')
-    console.log(data)
-  })
-
-  console.log(response)
-
   socket.on('connect', () => {
     console.log('socket.io connected')
   })

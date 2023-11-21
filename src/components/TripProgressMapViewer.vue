@@ -6,7 +6,7 @@
       <v-card>
         <v-toolbar
           color="primary"
-          title="Opening from the bottom"
+          title="Ongoing Trips"
         ></v-toolbar>
         <v-card-text>
           <div id="map"></div>

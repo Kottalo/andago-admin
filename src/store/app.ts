@@ -14,7 +14,9 @@ const axiosInstance = axios.create({
 export const useAppStore = defineStore('app', {
   state: () => ({
     tripProgressMapViewerOpen: false,
+    tripPointsViewerOpen: false,
     viewingTrip: null as any,
+    tripPoints: [] as any,
   }),
   getters: {
     async supabaseToken() {
@@ -34,7 +36,10 @@ export const useAppStore = defineStore('app', {
     }
   },
   actions: {
-
+    viewTripPoints(points: any[]) {
+      this.tripPoints = points
+      this.tripPointsViewerOpen = true
+    }
   },
   persist: {
     enabled: true,
