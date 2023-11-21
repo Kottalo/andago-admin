@@ -60,10 +60,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { supabase } from '@/services/supabase'
+// import { supabase } from '@/services/supabase'
 import { useAppStore } from '@/store/app'
 import router from '@/router'
 import andagoLogo from '@/assets/andago-logo.png'
+import { createClient } from '@supabase/supabase-js'
+
+export const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 const form = ref(false)
 const loading = ref(false)
