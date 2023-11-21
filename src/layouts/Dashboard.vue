@@ -73,4 +73,12 @@ async function logout()
     router.go(0)
   }
 }
+
+onMounted(async () => {
+  socket.auth = {
+    token: await store.supabaseToken,
+  }
+
+  socket.connect()
+})
 </script>
