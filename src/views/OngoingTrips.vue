@@ -29,7 +29,7 @@
             @click="viewTripStatus(trip)"
           >
             <v-chip color="success">
-              {{ getTripStatusText(trip?.status) }}
+              {{ getTripStatusText(trip?.tripStatus) }}
             </v-chip>
           </v-btn>
         </td>
