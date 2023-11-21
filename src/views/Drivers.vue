@@ -11,33 +11,34 @@
 
       <tbody>
       <tr
-        v-for="driver in data"
+        v-for="driver in driverData"
         :key="driver.id"
       >
-        <td class="text-center">{{ driver?.user?.name }}</td>
+        <td class="text-center">{{ driver?.profile.name }}</td>
         <td class="text-center">
           <v-img
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="storageUrl + '/driver_photos/' + driver?.profile_photo"
+            :src="store.getSupabaseStorageUrl('drivers') + driver?.driverPhoto"
           ></v-img>
         </td>
-        <td class="text-center">{{ driver?.license_number }}</td>
+        <td class="text-center">{{ driver?.licenseNumber }}</td>
         <td class="text-center">
           <v-img
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="storageUrl + '/license_photos/' + driver?.license_photo"
+            :src="store.getSupabaseStorageUrl('licenses') + driver?.licensePhoto"
           ></v-img>
         </td>
         <td class="text-center">
           <v-select
-            v-model="driver.status"
-            :items="statuses"
+            v-model="driver.verifyStatus"
+            :items="verifyStatusSelections"
             item-title="text"
             item-value="value"
+            :bg-color="getVerifyStatusColor(driver.verifyStatus)"
             @update:model-value="updateDriver(driver)"
           ></v-select>
         </td>
@@ -50,10 +51,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/app'
+import { verifyStatusSelections, getVerifyStatusColor } from '@/configs/main-configs'
+import socket from '@/services/socket-io'
 
 const store = useAppStore()
-
-const storageUrl = import.meta.env.VITE_STORAGE_URL
 
 const groupBy = [
   {
@@ -71,45 +72,28 @@ const headers = [
   // { text: 'Actions', value: 'action' },
 ]
 
-const data = ref<any[]>([] as any[])
-
-const statuses = [
-  {
-    text: 'Pending',
-    value: 'pending',
-  },
-  {
-    text: 'Verified',
-    value: 'verified',
-  },
-  {
-    text: 'Rejected',
-    value: 'rejected',
-  },
-]
+const driverData = ref<any[]>([] as any[])
 
 onMounted(() => {
   getDrivers()
 })
 
 function getDrivers() {
-  store.axios.post('/getDrivers')
-    .then((res: any) => {
-      const drivers = res.data
+  socket.emit('adminGetDrivers', null, (data: any) => {
+    console.log('adminGetDrivers', data)
 
-      data.value = drivers
-    })
+    driverData.value = data.drivers
+  })
 }
 
 function updateDriver(driver: any) {
-  store.axios.post('/updateDriver', {
-    driverId: driver.id,
-    status: driver.status,
+  console.log(driver)
+
+  socket.emit('adminUpdateDriver', { driver }, (data: any) => {
+    console.log('adminUpdateDriver', data)
+
+    driverData.value = data.drivers
   })
-    .then((res: any) => {
-      console.log(res.data)
-      getDrivers()
-    })
 }
 
 </script>

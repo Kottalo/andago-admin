@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   },
-});
+})
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -39,7 +39,10 @@ export const useAppStore = defineStore('app', {
     viewTripPoints(points: any[]) {
       this.tripPoints = points
       this.tripPointsViewerOpen = true
-    }
+    },
+    getSupabaseStorageUrl(folderName: string) {
+      return supabase.storage.from('main-bucket').getPublicUrl(folderName).data.publicUrl + '/'
+    },
   },
   persist: {
     enabled: true,

@@ -14,22 +14,23 @@
         v-for="car in carData"
         :key="car.id"
       >
-        <td class="text-center">{{ car.plateNumber }}</td>
         <td class="text-center">{{ car.passenger.profile.name }}</td>
+        <td class="text-center">{{ car.plateNumber }}</td>
         <td class="text-center">
           <v-img
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="storageUrl + '/vehicles/' + car.carPhoto"
+            :src="store.getSupabaseStorageUrl('cars') + car.carPhoto"
           ></v-img>
         </td>
         <td class="text-center">
           <v-select
-            v-model="car.status"
-            :items="carStatuses"
+            v-model="car.verifyStatus"
+            :items="verifyStatusSelections"
             item-title="text"
             item-value="value"
+            :bg-color="getVerifyStatusColor(car.verifyStatus)"
             @update:model-value="updateCar(car)"
           ></v-select>
         </td>
@@ -42,43 +43,21 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/app'
-import socket from '@/services/socket-io';
+import socket from '@/services/socket-io'
+import { supabase } from '@/services/supabase'
+import { verifyStatusSelections, getVerifyStatusColor } from '@/configs/main-configs'
+import { get } from 'http'
 
 const store = useAppStore()
 
-const storageUrl = import.meta.env.VITE_STORAGE_URL
-
-const groupBy = [
-  {
-    key: 'passenger',
-    order: 'asc'
-  }
-]
-
 const headers = [
-  { text: 'Car Number', value: 'plate_number' },
-  { text: 'Passenger', value: 'passenger.user.name' },
-  { text: 'Car Photo', value: 'vehicle_photo' },
-  { text: 'Status', value: 'status' },
-  // { text: 'Actions', value: 'action' },
+  { text: 'Passenger' },
+  { text: 'Car Number' },
+  { text: 'Car Photo' },
+  { text: 'Status' },
 ]
 
 const carData = ref<any[]>([] as any[])
-
-const carStatuses = [
-  {
-    text: 'Pending',
-    value: 'PENDING',
-  },
-  {
-    text: 'Verified',
-    value: 'VERIFIED',
-  },
-  {
-    text: 'Rejected',
-    value: 'REJECTED',
-  },
-]
 
 onMounted(() => {
   getCars()
@@ -86,14 +65,20 @@ onMounted(() => {
 
 function getCars() {
   socket.emit('adminGetCars', null, (data: any) => {
-    console.log(data)
+    console.log('adminGetCars', data)
 
     carData.value = data.cars
   })
 }
 
-function updateCar(vehicle: any) {
-  
+function updateCar(car: any) {
+  console.log(car)
+
+  socket.emit('adminUpdateCar', { car }, (data: any) => {
+    console.log('adminUpdateCar', data)
+
+    carData.value = data.cars
+  })
 }
 
 </script>
