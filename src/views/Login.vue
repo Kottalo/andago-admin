@@ -66,7 +66,7 @@ import router from '@/router'
 import andagoLogo from '@/assets/andago-logo.png'
 import { createClient } from '@supabase/supabase-js'
 
-export const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
 const form = ref(false)
 const loading = ref(false)
