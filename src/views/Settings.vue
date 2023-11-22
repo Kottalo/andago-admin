@@ -71,7 +71,7 @@ function updateConfig()
 {
   console.log('adminUpdateConfig', config)
 
-  socket.emit('updateConfig', { config }, (data: { config: any }) => {
+  socket.emit('adminUpdateConfig', { config }, (data: { config: any }) => {
     const configData = data.config
 
     setConfig(configData)
