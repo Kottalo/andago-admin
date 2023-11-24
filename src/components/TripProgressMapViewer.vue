@@ -26,6 +26,7 @@ import { onMounted, watch, ref } from 'vue'
 import { useAppStore } from "@/store/app";
 import mapLoader from "@/services/google-maps";
 import carImageUrl from "@/assets/flat_icons/car.png";
+import socket from '@/services/socket-io';
 
 const store = useAppStore()
 
@@ -59,7 +60,7 @@ function getTrip()
   }
 
   store.axios
-    .post(`/getTrip`, data)
+    .post(`/adminGetOngoingTrip`, data)
     .then((response) => {
       store.viewingTrip = response.data
 
@@ -69,38 +70,35 @@ function getTrip()
     .catch((error) => {
       console.log(error)
     })
+
+    socket.emit('adminGetOngoingTrip', data, (data: any) => {
+      console.log('adminGetOngoingTrip', data)
+
+      store.viewingTrip = data.viewingTrip
+
+      updateMap()
+    })
 }
 
 function updateMap()
 {
   currentTrip.value = store.viewingTrip
 
-  const driverCoordinate = currentTrip.value?.driver?.coordinate
-  const pickupCoordinate = currentTrip.value?.pickup_place?.coordinate
-  const dropoffCoordinate = currentTrip.value?.dropoff_place?.coordinate
+  const driver = currentTrip.value?.driver
+  const pickupPlace = currentTrip.value?.points[0]?.place
+  const dropoffPlace = currentTrip.value?.points[currentTrip.value?.points.length - 1]?.place
 
-  const driverPosition = {
-    lat: driverCoordinate.lat,
-    lng: driverCoordinate.lng
-  }
+  const driverCoordinate =  { lat: driver?.latitude, lng: driver?.longitude}
+  const pickupCoordinate = { lat: pickupPlace?.latitude, lng: pickupPlace?.longitude}
+  const dropoffCoordinate = { lat: dropoffPlace?.latitude, lng: dropoffPlace?.longitude}
 
-  const pickupPosition = {
-    lat: pickupCoordinate.lat,
-    lng: pickupCoordinate.lng
-  }
+  driverMarker.value.setPosition(driverCoordinate)
+  pickupMarker.value.setPosition(pickupCoordinate)
+  dropoffMarker.value.setPosition(dropoffCoordinate)
 
-  const dropoffPosition = {
-    lat: dropoffCoordinate.lat,
-    lng: dropoffCoordinate.lng
-  }
-
-  driverMarker.value.setPosition(driverPosition)
-  pickupMarker.value.setPosition(pickupPosition)
-  dropoffMarker.value.setPosition(dropoffPosition)
-
-  bounds.value.extend(driverPosition);
-  bounds.value.extend(pickupPosition);
-  bounds.value.extend(dropoffPosition);
+  bounds.value.extend(driverCoordinate);
+  bounds.value.extend(pickupCoordinate);
+  bounds.value.extend(dropoffCoordinate);
 
   // Apply the bounds to the map
   googleMap.value.fitBounds(bounds.value);
@@ -138,22 +136,27 @@ function loadMap()
 
       const trip = store.viewingTrip
 
-      const driverPosition = trip?.driver?.coordinate
-      const pickupPosition = trip?.pickup_place?.coordinate
-      const dropoffPosition = trip?.dropoff_place?.coordinate
+      const driver = trip.value?.driver
+      const pickupPlace = trip.value?.points[0]?.place
+      const dropoffPlace = trip.value?.points[currentTrip.value?.points.length - 1]?.place
 
+      const driverCoordinate =  { lat: driver?.latitude, lng: driver?.longitude}
+      const pickupCoordinate = { lat: pickupPlace?.latitude, lng: pickupPlace?.longitude}
+      const dropoffCoordinate = { lat: dropoffPlace?.latitude, lng: dropoffPlace?.longitude}
+
+      
       driverMarker.value = new google.maps.Marker({
         map: googleMap.value,
         icon: driverIcon,
-        position: driverPosition
+        position: driverCoordinate
       })
       pickupMarker.value = new google.maps.Marker({
         map: googleMap.value,
-        position: pickupPosition,
+        position: pickupCoordinate,
       })
       dropoffMarker.value = new google.maps.Marker({
         map: googleMap.value,
-        position: dropoffPosition,
+        position: dropoffCoordinate,
       })
 
       bounds.value = new google.maps.LatLngBounds()
