@@ -9,7 +9,7 @@
           <v-text-field prepend-icon="mdi-clock-time-three-outline" label="Per Minute Rate (RM)" v-model="config.perMinuteRate_rm" prefix="RM" suffix="per min"></v-text-field>
           <v-text-field prepend-icon="mdi-alarm" label="Free Wait Time (min)" v-model="config.freeWaitTime_min" suffix="min"></v-text-field>
           <v-text-field prepend-icon="mdi-cash-clock" label="Wait Time Fee (RM)" v-model="config.waitTimeFeePerMinute_rm" prefix="RM" suffix="per min"></v-text-field>
-          <v-text-field prepend-icon="mdi-cash-clock" label="Driver Commission (%)" v-model="config.driverCommissionRate" suffix="%"></v-text-field>
+          <v-text-field prepend-icon="mdi-percent" label="Driver Commission (%)" v-model="config.driverCommissionRate" suffix="%"></v-text-field>
         </v-form>
       </div>
     </v-container>
