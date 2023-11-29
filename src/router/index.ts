@@ -50,7 +50,12 @@ const routes = [
         path: 'tripHistory',
         name: 'Trip History',
         component: () => import('@/views/TripHistory.vue'),
-      }
+      },
+      {
+        path: 'advanced',
+        name: 'Advanced',
+        component: () => import('@/views/Advanced.vue'),
+      },
     ]
   }
 ]

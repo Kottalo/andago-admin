@@ -21,6 +21,7 @@
         <v-list-item prepend-icon="mdi-card-account-details-outline" title="Drivers" value="drivers" to="drivers"></v-list-item>
         <v-list-item prepend-icon="mdi-flag-variant" title="Ongoing Trips" value="ongoingTrips" to="ongoingTrips"></v-list-item>
         <v-list-item prepend-icon="mdi-history" title="Trip History" value="tripHistory" to="tripHistory"></v-list-item>
+        <v-list-item prepend-icon="mdi-security" title="Advanced" value="advanced" to="advanced"></v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main>
