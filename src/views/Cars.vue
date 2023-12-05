@@ -21,7 +21,7 @@
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="store.getSupabaseStorageUrl('cars') + car.carPhoto"
+            :src="store.getSupabaseStorageUrl(`cars/${car.carPhoto}`)"
           ></v-img>
         </td>
         <td class="text-center">

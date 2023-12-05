@@ -52,6 +52,11 @@ const routes = [
         component: () => import('@/views/TripHistory.vue'),
       },
       {
+        path: 'payrolls',
+        name: 'Payrolls',
+        component: () => import('@/views/Payrolls.vue'),
+      },
+      {
         path: 'advanced',
         name: 'Advanced',
         component: () => import('@/views/Advanced.vue'),

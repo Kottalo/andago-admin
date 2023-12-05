@@ -15,8 +15,16 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     tripProgressMapViewerOpen: false,
     tripPointsViewerOpen: false,
+    approvePayrollDialogOpen: false,
+    selectedPayrollId: 0,
     viewingTrip: null as any,
     tripPoints: [] as any,
+    snackbar: {
+      show: false,
+      message: '',
+      timeout: 1000,
+      color: 'dark',
+    },
   }),
   getters: {
     async supabaseToken() {
@@ -40,9 +48,15 @@ export const useAppStore = defineStore('app', {
       this.tripPoints = points
       this.tripPointsViewerOpen = true
     },
-    getSupabaseStorageUrl(folderName: string) {
-      return supabase.storage.from('main-bucket').getPublicUrl(folderName).data.publicUrl + '/'
+    getSupabaseStorageUrl(filePath: string) {
+      return supabase.storage.from('main-bucket').getPublicUrl(filePath).data.publicUrl
     },
+    showSnackbar(message: string, timeout: number = 1000, color: string = 'dark') {
+      this.snackbar.message = message
+      this.snackbar.timeout = timeout
+      this.snackbar.color = color
+      this.snackbar.show = true
+    }
   },
   persist: {
     enabled: true,

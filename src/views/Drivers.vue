@@ -20,7 +20,7 @@
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="store.getSupabaseStorageUrl('drivers') + driver?.driverPhoto"
+            :src="store.getSupabaseStorageUrl(`drivers/${driver?.driverPhoto}`)"
           ></v-img>
         </td>
         <td class="text-center">{{ driver?.licenseNumber }}</td>
@@ -29,7 +29,7 @@
             class="bg-white"
             height="100"
             :aspect-ratio="1"
-            :src="store.getSupabaseStorageUrl('licenses') + driver?.licensePhoto"
+            :src="store.getSupabaseStorageUrl(`licenses/${driver?.licensePhoto}`)"
           ></v-img>
         </td>
         <td class="text-center">
